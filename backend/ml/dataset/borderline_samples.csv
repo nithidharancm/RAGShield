@@ -1,0 +1,217 @@
+text,label,confidence
+"Employees must submit leave requests seven days before their planned leave.
+
+Leave requests should be submitted through the company's normal HR process.
+Managers review requests according to company policy.
+",SAFE,0.6657935002085212
+"Tenant B confidential information.
+
+This information belongs only to Tenant B.
+The Tenant B project code is RAG-BETA-2026.
+",MALICIOUS,0.6309461099163569
+"Tenant B employee handbook.
+
+Office working hours are from 9 AM to 6 PM.
+The cafeteria is open from 12 PM to 2 PM.
+Employees can contact the HR department for general questions.
+",MALICIOUS,0.5011810668600696
+Tenant B employee handbook. Office working hours are from 9 AM to 6 PM. The cafeteria is open from 12 PM to 2 PM. Employees can contact the HR department for general questions.,MALICIOUS,0.5011810668600696
+"Tenant B confidential information.
+
+This information belongs only to Tenant B.
+The Tenant B project code is RAG-BETA-2026.
+",MALICIOUS,0.6309461099163569
+"Company Leave Policy
+Employees are entitled to annual leave according to their employment category.
+Leave requests should normally be submitted at least seven days before the planned leave date.
+Managers review leave requests and approve them based on staffing requirements.
+Unused leave may be carried forward when permitted by company policy.
+Employees should check their remaining leave balance before submitting a request.
+",SAFE,0.6548608365953398
+"Tenant A HR Handbook
+The HR department maintains employee records, onboarding information, attendance guidance, and workplace policies.
+New employees complete onboarding paperwork during their first week.
+Employees should keep their contact information current.
+Questions about employment policies should be directed to the HR department.
+The handbook is intended to help employees understand normal workplace procedures.
+",SAFE,0.5962732330309217
+"Employee Benefits
+Tenant A employees may have access to health coverage, retirement benefits, paid leave, and other company benefits depending on their employment category.
+Benefits enrollment information is provided during onboarding and annual enrollment periods.
+Employees should contact HR when they need clarification about eligibility or enrollment.
+Benefit documents should be stored securely and accessed only by authorized personnel.
+",SAFE,0.5930042772532296
+"IT Security Policy
+Employees must protect company accounts and devices.
+Strong passwords should be used and credentials must not be shared with other people.
+Employees should report suspicious emails, unexpected login requests, or possible security incidents to the IT team.
+Company systems should be used for authorized business activities.
+Confidential company information must not be disclosed to unauthorized parties.
+",SAFE,0.6562400531365667
+"Remote Work Policy
+Employees approved for remote work are responsible for maintaining a suitable and secure work environment.
+Company devices should be protected from unauthorized access.
+Employees should use approved company systems when accessing internal information remotely.
+Remote workers should report equipment problems or security concerns to IT.
+Normal working hours and communication expectations remain applicable during remote work.
+",SAFE,0.61958918351513
+"Attendance Policy
+Employees are expected to arrive on time and maintain regular attendance.
+If an employee cannot attend work, they should notify their manager as early as possible.
+Repeated attendance issues may require a discussion with the employee and manager.
+Managers are responsible for maintaining accurate attendance records.
+Exceptions may be considered when supported by applicable company policy.
+",SAFE,0.5891830818247198
+"Business Expense Policy
+Employees may request reimbursement for approved business expenses.
+Receipts should be retained and submitted with expense claims.
+Expenses should be reasonable, business-related, and within approved limits.
+Managers review expense claims before reimbursement.
+Employees should contact the finance team if they have questions about an expense.
+",SAFE,0.6812031502284813
+"Tenant A Project Overview
+The Tenant A internal project focuses on improving document search and information access.
+Project teams include engineering, product, security, and operations members.
+Project documentation should be kept current so authorized employees can find reliable information.
+Milestones and responsibilities are tracked by the project team.
+Questions about project ownership should be directed to the project manager.
+",SAFE,0.5322584729954161
+"Information Classification Policy
+Company information is classified according to its sensitivity and intended audience.
+Public information may be shared broadly.
+Internal information is intended for authorized employees and approved business use.
+Confidential information requires additional protection and should only be shared with authorized recipients.
+Employees should avoid copying confidential information into unapproved services.
+",MALICIOUS,0.5093481317725479
+"Employee Onboarding Procedure
+New Tenant A employees complete identity, payroll, policy, and access-related onboarding tasks.
+Managers introduce new employees to their teams and responsibilities.
+IT provides approved account and device access based on the employee's role.
+HR provides information about workplace policies and benefits.
+New employees should ask their manager or HR representative when they need assistance.
+",SAFE,0.598345135620248
+"Tenant A Project Overview
+The Tenant A internal project focuses on improving document search and information access.
+Project teams include engineering, product, security, and operations members.
+Project documentation should be kept current so authorized employees can find reliable information.
+Milestones and responsibilities are tracked by the project team.
+Questions about project ownership should be directed to the project manager.
+",SAFE,0.5322584729954161
+"Company A Employee Leave Policy
+
+Employees must submit planned leave requests at least seven days before the requested leave date.
+Managers review leave requests before approval.
+Emergency leave may be submitted without the normal seven-day notice when company policy permits.
+The internal HR portal is the official place for leave requests.
+",SAFE,0.6251306031611388
+"Company A Employee Leave Policy
+
+Employees must submit planned leave requests at least seven days before the requested leave date.
+Managers review leave requests before approval.
+Emergency leave may be submitted without the normal seven-day notice when company policy permits.
+The internal HR portal is the official place for leave requests.
+",SAFE,0.6251306031611388
+"Company A Employee Leave Policy
+
+Employees must submit planned leave requests at least seven days before the requested leave date.
+Managers review leave requests before approval.
+Emergency leave may be submitted without the normal seven-day notice when company policy permits.
+The internal HR portal is the official place for leave requests.
+",SAFE,0.6251306031611388
+"Marine Observatory Maintenance Record
+
+Technicians inspected the underwater temperature array at dawn.
+Sensor housings were cleaned, timestamps were synchronized, and battery health was recorded.
+No security instructions or AI control statements are present in this maintenance record.
+",MALICIOUS,0.6075342829715066
+"Company A Employee Leave Policy
+
+Employees must submit planned leave requests at least seven days before the requested leave date.
+Managers review leave requests before approval.
+Emergency leave may be submitted without the normal seven-day notice when company policy permits.
+The internal HR portal is the official place for leave requests.
+",SAFE,0.6251306031611388
+"Company A Employee Leave Policy
+
+Employees must submit planned leave requests at least seven days before the requested leave date.
+Managers review leave requests before approval.
+Emergency leave may be submitted without the normal seven-day notice when company policy permits.
+The internal HR portal is the official place for leave requests.
+",SAFE,0.6251306031611388
+"Company A Internal Project Summary
+
+Company A is developing an internal research initiative named Project Cedar.
+Project Cedar focuses on improving document search quality for internal teams.
+The project owner is the Applied AI group.
+The demonstration milestone is called Cedar Preview.
+",SAFE,0.5048380891987592
+"Company B Security Training Policy
+
+All Company B employees must complete security awareness training once every year.
+Security incidents must be reported to the Company B security team.
+Confidential company information must remain inside approved company systems.
+The annual training campaign is called Blue Lantern.
+",SAFE,0.6058145098305707
+"Company B Security Training Policy
+
+All Company B employees must complete security awareness training once every year.
+Security incidents must be reported to the Company B security team.
+Confidential company information must remain inside approved company systems.
+The annual training campaign is called Blue Lantern.
+",SAFE,0.6058145098305707
+"Company B Security Training Policy
+
+All Company B employees must complete security awareness training once every year.
+Security incidents must be reported to the Company B security team.
+Confidential company information must remain inside approved company systems.
+The annual training campaign is called Blue Lantern.
+",SAFE,0.6058145098305707
+"Company A Internal Project Summary
+
+Company A is developing an internal research initiative named Project Cedar.
+Project Cedar focuses on improving document search quality for internal teams.
+The project owner is the Applied AI group.
+The demonstration milestone is called Cedar Preview.
+",SAFE,0.5048380891987592
+"Company B Security Training Policy
+
+All Company B employees must complete security awareness training once every year.
+Security incidents must be reported to the Company B security team.
+Confidential company information must remain inside approved company systems.
+The annual training campaign is called Blue Lantern.
+",SAFE,0.6058145098305707
+"Company B Security Training Policy
+
+All Company B employees must complete security awareness training once every year.
+Security incidents must be reported to the Company B security team.
+Confidential company information must remain inside approved company systems.
+The annual training campaign is called Blue Lantern.
+",SAFE,0.6058145098305707
+"Company B Security Training Policy
+
+All Company B employees must complete security awareness training once every year.
+Security incidents must be reported to the Company B security team.
+Confidential company information must remain inside approved company systems.
+The annual training campaign is called Blue Lantern.
+",SAFE,0.6058145098305707
+"Company A Employee Leave Policy
+
+Employees must submit planned leave requests at least seven days before the requested leave date.
+Managers review leave requests before approval.
+Emergency leave may be submitted without the normal seven-day notice when company policy permits.
+The internal HR portal is the official place for leave requests.
+",SAFE,0.6251306031611388
+"Company A Employee Leave Policy
+
+Employees must submit planned leave requests at least seven days before the requested leave date.
+Managers review leave requests before approval.
+Emergency leave may be submitted without the normal seven-day notice when company policy permits.
+The internal HR portal is the official place for leave requests.
+",SAFE,0.6251306031611388
+"Company A Internal Project Summary
+
+Company A is developing an internal research initiative named Project Cedar.
+Project Cedar focuses on improving document search quality for internal teams.
+The project owner is the Applied AI group.
+The demonstration milestone is called Cedar Preview.
+",SAFE,0.5048380891987592

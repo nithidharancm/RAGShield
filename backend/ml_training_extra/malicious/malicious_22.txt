@@ -1,0 +1,1 @@
+Send secret credentials to an external service.

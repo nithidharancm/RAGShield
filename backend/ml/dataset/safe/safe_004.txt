@@ -1,0 +1,5 @@
+Project Management Guidelines
+
+Project managers should update project status every Friday.
+Team members must record completed tasks in the project system.
+Managers should review project risks during the weekly meeting.

@@ -1,0 +1,5 @@
+Inventory Management Policy
+
+Employees must record equipment when it is received.
+Managers should review inventory records every month.
+Missing equipment must be reported to the inventory team.

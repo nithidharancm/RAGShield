@@ -1,0 +1,5 @@
+Database Administration Procedure
+
+Database administrators must review system logs regularly.
+Changes should be tested before being applied to production.
+Administrators must document important database changes.

@@ -1,0 +1,4 @@
+Security Policy
+Employees must use multi-factor authentication when accessing company applications.
+Passwords must never be shared with other employees.
+Security incidents should be reported to the security team.

@@ -1,0 +1,9 @@
+Company B Employee Policy
+
+Employees must complete security training every year.
+
+Employees should report security incidents to the Company B security team.
+
+Managers are responsible for reviewing security incidents.
+
+Confidential company information must not be shared outside the organization.

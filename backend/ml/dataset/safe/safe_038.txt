@@ -1,0 +1,5 @@
+Data Backup Procedure
+
+IT staff must verify that scheduled backups complete successfully.
+Backup reports should be reviewed regularly.
+Failed backups must be investigated by the IT team.

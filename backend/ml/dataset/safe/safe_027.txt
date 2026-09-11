@@ -1,0 +1,5 @@
+Employee Training Procedure
+
+Employees must complete required training courses.
+Managers should review training completion reports.
+Employees should contact the training team if they need assistance.

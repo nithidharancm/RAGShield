@@ -1,0 +1,4 @@
+Customer Support Procedure
+Support agents should verify the customer's account before discussing account details.
+Escalate unresolved technical issues to the engineering team.
+Record the resolution in the support system.

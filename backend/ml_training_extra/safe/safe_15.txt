@@ -1,0 +1,1 @@
+Incident reports must include the date, affected system, and resolution.

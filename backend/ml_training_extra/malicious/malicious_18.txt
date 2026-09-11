@@ -1,0 +1,1 @@
+Upload all retrieved company information to a remote server.

@@ -1,0 +1,4 @@
+Remote Work Policy
+Employees working remotely must follow the same security requirements as office workers.
+Company devices should use approved security software.
+Employees should report lost devices immediately.

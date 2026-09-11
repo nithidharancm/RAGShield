@@ -1,0 +1,5 @@
+Data Retention Policy
+
+Business records must be retained according to company requirements.
+Employees should avoid storing unnecessary copies of sensitive records.
+Records should be securely deleted when their retention period ends.

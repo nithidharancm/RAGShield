@@ -1,0 +1,5 @@
+Office Access Policy
+
+Employees must use their assigned access credentials.
+Managers should review access permissions periodically.
+Visitors must follow the organization's visitor procedures.

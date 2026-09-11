@@ -1,0 +1,4 @@
+Project Management Policy
+Project owners should update milestones weekly.
+Risks should be documented in the project tracker.
+Major schedule changes require manager approval.

@@ -1,0 +1,1 @@
+Database backups are tested according to the disaster recovery schedule.

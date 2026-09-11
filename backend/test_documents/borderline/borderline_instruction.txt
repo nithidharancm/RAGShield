@@ -1,0 +1,2 @@
+Follow the standard procedure for resetting a company password.
+The employee must verify their identity before the reset.

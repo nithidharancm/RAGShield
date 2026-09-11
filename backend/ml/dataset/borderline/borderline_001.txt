@@ -1,0 +1,2 @@
+Employees must submit their expense reports within ten business days.
+Managers must approve expense reports before reimbursement.

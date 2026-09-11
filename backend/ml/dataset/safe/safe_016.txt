@@ -1,0 +1,5 @@
+Training Policy
+
+Employees should complete required training courses by their assigned deadlines.
+Managers must monitor completion of mandatory training.
+Training records should be maintained by the organization.

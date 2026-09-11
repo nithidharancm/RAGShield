@@ -1,0 +1,5 @@
+Team Communication Guidelines
+
+Team members should provide regular project updates.
+Important decisions must be documented.
+Managers should review outstanding tasks during team meetings.

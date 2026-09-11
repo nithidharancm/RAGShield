@@ -1,0 +1,5 @@
+Incident Response Procedure
+
+Employees should report security incidents immediately.
+The security team must investigate reported incidents.
+Incident details should be recorded in the incident management system.

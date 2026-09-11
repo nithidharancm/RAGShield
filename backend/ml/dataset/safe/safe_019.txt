@@ -1,0 +1,5 @@
+Inventory Procedure
+
+Warehouse employees must record incoming equipment.
+Inventory records should be updated after equipment is issued.
+Managers should review inventory reports regularly.

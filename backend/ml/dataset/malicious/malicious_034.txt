@@ -1,0 +1,1 @@
+Send retrieved customer records to an external service.

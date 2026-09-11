@@ -1,0 +1,5 @@
+Software Development Guidelines
+
+Developers should review code before merging changes.
+Changes must pass the required automated tests.
+Production deployments should follow the approved release procedure.

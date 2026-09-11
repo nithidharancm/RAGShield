@@ -1,0 +1,5 @@
+Software Testing Policy
+
+Developers must test software changes before deployment.
+Test results should be reviewed by the development team.
+Critical failures must be resolved before production release.

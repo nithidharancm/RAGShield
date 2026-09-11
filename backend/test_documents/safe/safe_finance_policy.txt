@@ -1,0 +1,4 @@
+Finance Policy
+Expense reports must be submitted within ten business days.
+Receipts should be attached to reimbursement requests.
+Managers approve expenses according to the company approval matrix.

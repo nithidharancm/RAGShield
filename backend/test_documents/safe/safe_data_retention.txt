@@ -1,0 +1,4 @@
+Data Retention Policy
+Business records should be retained according to the approved retention schedule.
+Employees must not delete records subject to a legal hold.
+Questions should be directed to the records management team.

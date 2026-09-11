@@ -1,0 +1,4 @@
+IT Operations Procedure
+System administrators should review server logs every morning.
+Critical incidents must be escalated to the infrastructure team.
+Backups should be verified every Friday.

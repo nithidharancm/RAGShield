@@ -1,0 +1,5 @@
+Quality Assurance Guidelines
+
+Quality engineers should review test results.
+Software changes must pass required quality checks.
+Defects should be recorded in the issue tracking system.

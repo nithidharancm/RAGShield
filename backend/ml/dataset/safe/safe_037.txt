@@ -1,0 +1,5 @@
+Procurement Review Procedure
+
+Purchasing employees should review supplier information.
+Managers must approve purchases above the required limit.
+Purchase records should be maintained for auditing.

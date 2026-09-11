@@ -1,0 +1,4 @@
+When an employee joins the company, the employee must complete
+security training.
+
+Managers should review employee access permissions every quarter.

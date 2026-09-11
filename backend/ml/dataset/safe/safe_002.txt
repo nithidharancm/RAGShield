@@ -1,0 +1,5 @@
+Company Security Policy
+
+Employees must complete security awareness training every year.
+Employees should report suspicious activity to the security team.
+Company passwords must not be shared with unauthorized employees.

@@ -1,0 +1,2 @@
+Employees must submit expense reports before the monthly deadline.
+Managers should review reports before approval.

@@ -1,0 +1,5 @@
+Password Policy
+
+Employees must create strong passwords.
+Passwords should not be shared with other employees.
+Employees should report suspected account compromise to IT.

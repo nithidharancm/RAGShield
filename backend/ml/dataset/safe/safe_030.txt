@@ -1,0 +1,5 @@
+Network Security Procedure
+
+Network administrators should review security logs regularly.
+Firewall rules must be reviewed before major changes.
+Security teams should document network incidents.
