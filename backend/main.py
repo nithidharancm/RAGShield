@@ -19,17 +19,20 @@ from database.vector_store import (
     add_document,
     add_baseline_document,
 )
+
 from retrieval.authorization import get_authorized_tenant
 from retrieval.search import (
     tenant_scoped_search,
     baseline_search,
 )
+
 from retrieval.input_guard import detect_input_threats
 
 from generation.generator import (
     generate_answer,
     generate_baseline_answer,
 )
+
 from generation.guard import inspect_output
 from ingestion.auto_processor import start_auto_processor
 
@@ -61,7 +64,11 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://127.0.0.1:5173",
+        "http://localhost:5173",
+        "https://nithidharancm.github.io",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -77,10 +84,6 @@ QUARANTINE_FOLDER = Path("data/quarantine")
 
 
 # ---------------------------------------------------------
-# Health Check
-# ---------------------------------------------------------
-
-# ---------------------------------------------------------
 # Automatic Document Processor
 # ---------------------------------------------------------
 
@@ -88,6 +91,10 @@ QUARANTINE_FOLDER = Path("data/quarantine")
 def start_ragshield_processor():
     start_auto_processor()
 
+
+# ---------------------------------------------------------
+# Health Check
+# ---------------------------------------------------------
 
 @app.get("/health")
 def health_check():
@@ -195,13 +202,18 @@ async def upload_document(
     # -----------------------------------------------------
     # Baseline comparison copy
     # -----------------------------------------------------
-    # Every uploaded document is also indexed into the separate
-    # baseline collection. This copy is intentionally untrusted
-    # and is used ONLY when RAGShield is OFF.
     #
-    # IMPORTANT: indexing here does NOT mean the document passed
-    # Layer 1. The protected collection is still populated only
-    # after the normal RAGShield scan approves the document.
+    # Every uploaded document is also indexed into the separate
+    # baseline collection.
+    #
+    # This copy is intentionally untrusted and is used ONLY when
+    # RAGShield is OFF.
+    #
+    # Indexing here does NOT mean the document passed Layer 1.
+    #
+    # The protected collection is populated only after Layer 1
+    # approves the document.
+    # -----------------------------------------------------
 
     try:
         baseline_vector_result = add_baseline_document(
@@ -218,10 +230,8 @@ async def upload_document(
         )
 
     # -----------------------------------------------------
-    # RAGShield OFF: bypass Layer 1
+    # RAGShield OFF
     # -----------------------------------------------------
-    # The raw document is already available in the isolated
-    # baseline collection, so no ingestion security is executed.
 
     if not ragshield_enabled:
 
@@ -263,11 +273,8 @@ async def upload_document(
         }
 
     # -----------------------------------------------------
-    # RAGShield ON: keep the original secure upload flow
+    # RAGShield ON
     # -----------------------------------------------------
-    # A baseline comparison copy already exists, but the secure
-    # copy still starts as PENDING_SCAN and must pass Layer 1
-    # before it can enter the protected vector collection.
 
     metadata["security_bypassed"] = False
 
@@ -297,19 +304,18 @@ async def upload_document(
 @app.post("/documents/{document_id}/scan")
 def scan_uploaded_document(document_id: str):
     """
-    Run the Stage 1 security scanner.
+    Run Stage 1 security scanning.
 
-    The scanner combines:
+    Scanner combines:
     - Rule-based detection
     - ML poisoning detection
     - Corpus anomaly detection
 
-    Only APPROVED documents are allowed into ChromaDB.
-    QUARANTINED documents are moved to the quarantine folder.
+    Only APPROVED documents enter the protected vector database.
     """
 
     # -----------------------------------------------------
-    # STEP 1: Find document metadata
+    # STEP 1: Find metadata
     # -----------------------------------------------------
 
     document = get_document(document_id)
@@ -321,10 +327,11 @@ def scan_uploaded_document(document_id: str):
         )
 
     # -----------------------------------------------------
-    # Baseline documents deliberately bypass Layer 1
+    # Baseline document
     # -----------------------------------------------------
 
     if document.get("ragshield_enabled", True) is False:
+
         return {
             "document_id": document_id,
             "status": document.get(
@@ -421,7 +428,7 @@ def scan_uploaded_document(document_id: str):
         )
 
     # -----------------------------------------------------
-    # STEP 7: Save complete scan results
+    # STEP 7: Save scan results
     # -----------------------------------------------------
 
     update_document_metadata(
@@ -442,7 +449,7 @@ def scan_uploaded_document(document_id: str):
     )
 
     # -----------------------------------------------------
-    # STEP 8: QUARANTINE malicious documents
+    # STEP 8: Quarantine malicious document
     # -----------------------------------------------------
 
     if scan_result["status"] == "QUARANTINED":
@@ -503,7 +510,7 @@ def scan_uploaded_document(document_id: str):
         }
 
     # -----------------------------------------------------
-    # STEP 9: APPROVED documents enter ChromaDB
+    # STEP 9: Approved documents enter ChromaDB
     # -----------------------------------------------------
 
     vector_result = add_document(
@@ -557,7 +564,7 @@ def secure_search(request: SearchRequest):
 
     User question
         ↓
-    Input security / threat detection
+    Input security
         ↓
     Authorization
         ↓
@@ -565,22 +572,22 @@ def secure_search(request: SearchRequest):
         ↓
     Retrieved chunks
         ↓
-    Gemini
+    Groq LLM
         ↓
     Output security guard
         ↓
-    Safe answer OR BLOCK
+    Safe answer OR block
     """
 
     # -----------------------------------------------------
-    # RAGShield OFF: direct baseline RAG comparison
+    # RAGShield OFF: baseline comparison
     # -----------------------------------------------------
 
     if not request.ragshield_enabled:
 
-        # No input guard, authorization, tenant filter, or output guard.
-        # Retrieval uses only the separate baseline collection so unsafe
-        # demo data never contaminates the protected RAGShield collection.
+        # No input guard, authorization, tenant filter,
+        # or output guard.
+
         results = baseline_search(
             query=request.query
         )
@@ -618,6 +625,7 @@ def secure_search(request: SearchRequest):
             })
 
         if not retrieved_chunks:
+
             return {
                 "safe": None,
                 "blocked": False,
@@ -647,6 +655,7 @@ def secure_search(request: SearchRequest):
             )
 
         except Exception as error:
+
             raise HTTPException(
                 status_code=500,
                 detail=f"Baseline generation failed: {error}"
@@ -678,9 +687,12 @@ def secure_search(request: SearchRequest):
     # STEP 1: Input Security
     # -----------------------------------------------------
 
-    detected_threats = detect_input_threats(request.query)
+    detected_threats = detect_input_threats(
+        request.query
+    )
 
     if detected_threats:
+
         return {
             "safe": False,
             "blocked": True,
@@ -710,6 +722,7 @@ def secure_search(request: SearchRequest):
     )
 
     if authorized_tenant is None:
+
         raise HTTPException(
             status_code=403,
             detail="User is not authorized."
@@ -719,12 +732,12 @@ def secure_search(request: SearchRequest):
     # STEP 3: Tenant-scoped retrieval
     # -----------------------------------------------------
 
-    # IMPORTANT SECURITY RULE:
+    # SECURITY RULE:
     #
     # Authorization happens BEFORE vector search.
     #
-    # The vector search is restricted to the tenant
-    # that the user is authorized to access.
+    # Search is restricted to the tenant the user is
+    # authorized to access.
 
     results = tenant_scoped_search(
         query=request.query,
@@ -732,7 +745,7 @@ def secure_search(request: SearchRequest):
     )
 
     # -----------------------------------------------------
-    # STEP 4: Get ChromaDB results
+    # STEP 4: Read ChromaDB results
     # -----------------------------------------------------
 
     documents = results.get(
@@ -774,10 +787,6 @@ def secure_search(request: SearchRequest):
     # -----------------------------------------------------
     # Retrieval trace metadata
     # -----------------------------------------------------
-    # Keep a safe metadata-only copy of the retrieved evidence.
-    # This is returned even if Layer 3 blocks the generated answer,
-    # so the verification UI can still show what Layer 2 retrieved.
-    # The retrieved text itself is intentionally not exposed here.
 
     retrieved_sources = [
         {
@@ -790,18 +799,8 @@ def secure_search(request: SearchRequest):
     ]
 
     # -----------------------------------------------------
-    # STEP 6: STOP if no authorized evidence exists
+    # STEP 6: Stop if no authorized evidence exists
     # -----------------------------------------------------
-
-    # IMPORTANT SECURITY CONTROL:
-    #
-    # If there are no authorized documents, do NOT send
-    # an empty evidence set to Gemini.
-    #
-    # The request stops here.
-    #
-    # This prevents the LLM from trying to answer using
-    # information outside the authorized evidence.
 
     if not retrieved_chunks:
 
@@ -825,7 +824,7 @@ def secure_search(request: SearchRequest):
         }
 
     # -----------------------------------------------------
-    # STEP 7: Generate answer with Gemini
+    # STEP 7: Generate answer with Groq
     # -----------------------------------------------------
 
     try:
@@ -857,7 +856,7 @@ def secure_search(request: SearchRequest):
     )
 
     # -----------------------------------------------------
-    # STEP 9: BLOCK UNSAFE OUTPUT
+    # STEP 9: Block unsafe output
     # -----------------------------------------------------
 
     if not security_result["safe"]:
@@ -885,7 +884,7 @@ def secure_search(request: SearchRequest):
         }
 
     # -----------------------------------------------------
-    # STEP 10: Return SAFE output
+    # STEP 10: Return safe output
     # -----------------------------------------------------
 
     return {
