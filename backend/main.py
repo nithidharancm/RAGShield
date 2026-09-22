@@ -68,6 +68,7 @@ app.add_middleware(
         "http://127.0.0.1:5173",
         "http://localhost:5173",
         "https://nithidharancm.github.io",
+        "https://ragshield-frontend.onrender.com",
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -90,6 +91,19 @@ QUARANTINE_FOLDER = Path("data/quarantine")
 @app.on_event("startup")
 def start_ragshield_processor():
     start_auto_processor()
+
+
+# ---------------------------------------------------------
+# Root
+# ---------------------------------------------------------
+
+@app.get("/")
+def root():
+    return {
+        "message": "RAGShield backend is running",
+        "health": "/health",
+        "docs": "/docs"
+    }
 
 
 # ---------------------------------------------------------
