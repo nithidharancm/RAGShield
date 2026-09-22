@@ -413,7 +413,7 @@ export default function UploadPage({
               detail={
                 verification
                   ? verification.ragshield_enabled === false
-                    ? "Raw Gemini output returned without Layer 3 validation"
+                    ? "Raw Groq output returned without Layer 3 validation"
                     : verification.reason || "Output evaluated"
                   : readyForQuery
                     ? "Waiting for generation"

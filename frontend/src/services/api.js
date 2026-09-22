@@ -1,8 +1,13 @@
-const API_BASE =
+const API_BASE = (
   import.meta.env.VITE_API_BASE_URL ||
-  "https://ragshield-backend.onrender.com";
+  "https://ragshield-backend.onrender.com"
+).replace(/\/+$/, "");
+
+console.log("[RAGShield] API:", API_BASE);
+
 async function parseResponse(response) {
   let payload = null;
+
   try {
     payload = await response.json();
   } catch {
@@ -11,33 +16,53 @@ async function parseResponse(response) {
 
   if (!response.ok) {
     const detail = payload?.detail;
+
     const message = Array.isArray(detail)
-      ? detail.map((item) => item?.msg || "Validation error").join(", ")
-      : detail || payload?.message || `Request failed (${response.status})`;
+      ? detail
+          .map((item) => item?.msg || "Validation error")
+          .join(", ")
+      : detail ||
+        payload?.message ||
+        `Request failed (${response.status})`;
 
     const error = new Error(message);
     error.status = response.status;
     error.payload = payload;
+
     throw error;
   }
 
   return payload;
 }
 
+
 export async function checkHealth() {
-  const response = await fetch(`${API_BASE}/health`);
+  const response = await fetch(`${API_BASE}/health`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+    },
+  });
+
   return parseResponse(response);
 }
 
-export async function secureSearch(userId, query, ragshieldEnabled = true) {
+
+export async function secureSearch(
+  userId,
+  query,
+  ragshieldEnabled = true
+) {
   const started = performance.now();
 
   const response = await fetch(`${API_BASE}/search`, {
     method: "POST",
+
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
     },
+
     body: JSON.stringify({
       user_id: userId,
       query,
@@ -46,35 +71,79 @@ export async function secureSearch(userId, query, ragshieldEnabled = true) {
   });
 
   const payload = await parseResponse(response);
-  const latencyMs = Math.round(performance.now() - started);
 
-  return { payload, latencyMs };
+  const latencyMs = Math.round(
+    performance.now() - started
+  );
+
+  return {
+    payload,
+    latencyMs,
+  };
 }
 
-export async function uploadAndScan(file, tenantId, ragshieldEnabled = true) {
+
+export async function uploadAndScan(
+  file,
+  tenantId,
+  ragshieldEnabled = true
+) {
   const formData = new FormData();
-  formData.append("file", file);
-  formData.append("tenant_id", tenantId);
-  formData.append("ragshield_enabled", String(ragshieldEnabled));
 
-  const uploadResponse = await fetch(`${API_BASE}/documents/upload`, {
-    method: "POST",
-    body: formData,
-    headers: { Accept: "application/json" },
-  });
+  formData.append(
+    "file",
+    file
+  );
 
-  const upload = await parseResponse(uploadResponse);
+  formData.append(
+    "tenant_id",
+    tenantId
+  );
 
-  const scanResponse = await fetch(
-    `${API_BASE}/documents/${encodeURIComponent(upload.document_id)}/scan`,
+  formData.append(
+    "ragshield_enabled",
+    String(ragshieldEnabled)
+  );
+
+  const uploadResponse = await fetch(
+    `${API_BASE}/documents/upload`,
     {
       method: "POST",
-      headers: { Accept: "application/json" },
+
+      body: formData,
+
+      headers: {
+        Accept: "application/json",
+      },
     }
   );
 
-  const scan = await parseResponse(scanResponse);
-  return { upload, scan };
+  const upload =
+    await parseResponse(uploadResponse);
+
+  const scanResponse = await fetch(
+    `${API_BASE}/documents/${encodeURIComponent(
+      upload.document_id
+    )}/scan`,
+    {
+      method: "POST",
+
+      headers: {
+        Accept: "application/json",
+      },
+    }
+  );
+
+  const scan =
+    await parseResponse(scanResponse);
+
+  return {
+    upload,
+    scan,
+  };
 }
 
-export { API_BASE };
+
+export {
+  API_BASE,
+};

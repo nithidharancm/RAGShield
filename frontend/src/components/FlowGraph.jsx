@@ -56,7 +56,7 @@ export default function FlowGraph({
           <Edge danger />
           <FlowNode icon={LockKeyhole} title="Layer 2" subtitle="Retrieval Guard" meta="BYPASSED" state="warning" />
           <Edge danger />
-          <FlowNode icon={Bot} title="Gemini" subtitle="Raw generation" state="muted" />
+          <FlowNode icon={Bot} title="Groq" subtitle="Raw generation" state="muted" />
           <Edge danger />
           <FlowNode icon={ShieldCheck} title="Layer 3" subtitle="Output Guard" meta="BYPASSED" state="warning" />
           <Edge danger />
@@ -73,7 +73,7 @@ export default function FlowGraph({
         <div className="vertical-edge danger"><span /></div>
         <FlowNode icon={LockKeyhole} title="Layer 2" subtitle="BYPASSED · no tenant guard" state="warning" />
         <div className="vertical-edge danger"><span /></div>
-        <FlowNode icon={Bot} title="Gemini" subtitle="Raw baseline generation" state="muted" />
+        <FlowNode icon={Bot} title="Groq" subtitle="Raw baseline generation" state="muted" />
         <div className="vertical-edge danger"><span /></div>
         <FlowNode icon={ShieldCheck} title="Layer 3" subtitle="BYPASSED" state="warning" />
         <div className="vertical-edge danger"><span /></div>
@@ -151,8 +151,8 @@ export default function FlowGraph({
         <Edge />
         <FlowNode
           icon={Sparkles}
-          title="Gemini"
-          subtitle={trace?.layer_trace?.generation === "COMPLETED" ? "Grounded generation" : "Not run"}
+          title="Groq"
+          subtitle={trace?.layer_trace?.generation === "COMPLETED" ? "GPT OSS 20B generation" : "Not run"}
           state={trace?.layer_trace?.generation === "COMPLETED" ? "safe" : "muted"}
         />
         <Edge danger={outputBlocked} />
@@ -182,7 +182,7 @@ export default function FlowGraph({
       <div className="vertical-edge"><span /></div>
       <FlowNode icon={Database} title="Vector Search" subtitle="Authorized documents only" />
       <div className="vertical-edge"><span /></div>
-      <FlowNode icon={Sparkles} title="Gemini" subtitle="Grounded generation" />
+      <FlowNode icon={Sparkles} title="Groq" subtitle="GPT OSS 20B generation" />
       <div className={`vertical-edge ${outputBlocked ? "danger" : ""}`}><span /></div>
       <FlowNode
         icon={ShieldCheck}
