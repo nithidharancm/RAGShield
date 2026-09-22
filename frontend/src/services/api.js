@@ -1,5 +1,6 @@
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "https://ragshield-nw4s.onrender.com";
-
+const API_BASE =
+  import.meta.env.VITE_API_BASE_URL ||
+  "https://ragshield-backend.onrender.com";
 async function parseResponse(response) {
   let payload = null;
   try {
