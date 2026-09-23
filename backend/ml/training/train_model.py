@@ -12,7 +12,7 @@ from sklearn.pipeline import Pipeline
 # File locations
 # --------------------------------------------------
 
-TRAIN_FILE = Path("ml/dataset/train.csv")
+TRAIN_FILE = Path("ml/dataset/train_v2.csv")
 MODEL_FILE = Path("ml/models/ragshield_detector.pkl")
 
 

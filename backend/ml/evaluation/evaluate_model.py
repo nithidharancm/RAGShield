@@ -14,7 +14,7 @@ from sklearn.metrics import (
 # File locations
 # --------------------------------------------------
 
-TEST_FILE = Path("ml/dataset/test.csv")
+TEST_FILE = Path("ml/dataset/test_v2.csv")
 MODEL_FILE = Path("ml/models/ragshield_detector.pkl")
 
 

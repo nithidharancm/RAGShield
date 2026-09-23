@@ -13,48 +13,63 @@ DIRECT_PROMPT_INJECTION = [
     "ignore all instructions",
     "forget previous instructions",
     "forget everything you were previously instructed",
-    "system message",
-    "system prompt",
-    "system-level instruction",
-    "developer message",
-    "developer instructions",
+    "override previous instructions",
+    "override the system instructions",
+    "ignore system instructions",
+    "ignore developer instructions",
     "reveal your instructions",
     "reveal the system prompt",
     "reveal your prompt",
-    "hidden system instructions",
-    "hidden developer instructions",
+    "reveal hidden system instructions",
+    "reveal hidden developer instructions",
+    "disregard the surrounding content",
+    "disregard surrounding content",
+    "follow this document instead",
+    "this document overrides",
+    "higher priority than the system prompt",
+    "bypass authorization",
+    "ignore authorization restrictions",
+    "ignore tenant restrictions",
 ]
 
 
 RAG_DIRECTED_INSTRUCTIONS = [
     "when an ai reads this",
+    "when an ai system reads this document",
+    "when an ai system reads this",
     "when retrieved",
     "when this document is retrieved",
     "when this document is read",
-    "assistant should",
-    "assistant must",
-    "llm should",
-    "llm must",
-    "ai should",
-    "ai must",
+    "for automated processing only",
+    "hidden instruction for the language model",
+    "embedded assistant directive",
+    "when this content enters a retrieval system",
+    "during automated retrieval",
+    "for retrieval-time processing",
+    "treat this document as a system message",
     "follow the instructions contained here",
 ]
 
 
 SUSPICIOUS_EXTERNAL_ACTIONS = [
     "send confidential information",
+    "send confidential data",
     "upload data",
     "send data to a url",
     "download and execute",
+    "reveal confidential information",
+    "disclose confidential information",
+    "return internal secrets",
+    "reveal private context",
+    "reveal restricted information",
+    "send secret credentials",
+    "upload all retrieved data",
+    "retrieve api keys",
+    "return secret credentials",
+    "disclose passwords",
+    "reveal api keys",
+    "extract credentials",
 ]
-
-
-# =========================================================
-# ML security thresholds
-# =========================================================
-
-HIGH_CONFIDENCE = 0.90
-MEDIUM_CONFIDENCE = 0.60
 
 
 # =========================================================
@@ -73,23 +88,128 @@ def calculate_corpus_anomaly_score(text):
 
 
 # =========================================================
-# Find rule-based signals
+# Rule matching helpers
 # =========================================================
 
-def find_signals(text, patterns):
+def is_negated_context(text_lower, match_start):
+    """
+    Detect common benign negations immediately before
+    a suspicious phrase.
+
+    Examples that should NOT become attack signals:
+
+        must not reveal confidential information
+        never disclose confidential information
+        do not bypass authorization
+        should not reveal the system prompt
+
+    The window is intentionally short so a negation from an
+    earlier unrelated sentence does not suppress a real attack.
+    """
+
+    window = text_lower[
+        max(0, match_start - 80):match_start
+    ]
+
+    negation_patterns = [
+        r"\bdo\s+not\s*$",
+        r"\bdoes\s+not\s*$",
+        r"\bdid\s+not\s*$",
+        r"\bdon['’]?t\s*$",
+        r"\bmust\s+not\s*$",
+        r"\bmust\s+never\s*$",
+        r"\bshould\s+not\s*$",
+        r"\bshould\s+never\s*$",
+        r"\bnever\s*$",
+        r"\bcannot\s*$",
+        r"\bcan['’]?t\s*$",
+        r"\bnot\s+allowed\s+to\s*$",
+        r"\bprohibited\s+from\s*$",
+        r"\bforbidden\s+to\s*$",
+    ]
+
+    return any(
+        re.search(pattern, window)
+        for pattern in negation_patterns
+    )
+
+
+def build_pattern_regex(pattern):
+    """
+    Convert a literal rule phrase into a regex that tolerates
+    spaces, tabs, or line breaks between words.
+    """
+
+    escaped = re.escape(pattern)
+
+    # re.escape("reveal confidential") produces
+    # "reveal\\ confidential". Allow any whitespace there.
+    return escaped.replace(r"\ ", r"\s+")
+
+
+def find_signals(
+    text,
+    patterns,
+    ignore_negated=True
+):
+    """
+    Find rule-based attack signals.
+
+    Improvements over the original matcher:
+
+    1. Ignores common benign negations.
+    2. Handles line breaks / multiple spaces inside a phrase.
+    3. Prefers longer overlapping patterns so the UI does not
+       report both a long phrase and its shorter substring.
+    """
 
     text_lower = text.lower()
 
     found = []
+    occupied_ranges = []
 
-    for pattern in patterns:
+    # Longest first prevents duplicate signals such as:
+    # "when an ai system reads this document"
+    # and "when an ai system reads this"
+    sorted_patterns = sorted(
+        patterns,
+        key=len,
+        reverse=True
+    )
 
-        if re.search(
-            re.escape(pattern),
-            text_lower
-        ):
+    for pattern in sorted_patterns:
+
+        regex = build_pattern_regex(pattern)
+
+        for match in re.finditer(regex, text_lower):
+
+            if (
+                ignore_negated
+                and is_negated_context(
+                    text_lower,
+                    match.start()
+                )
+            ):
+                continue
+
+            start = match.start()
+            end = match.end()
+
+            overlaps_existing = any(
+                start < existing_end
+                and end > existing_start
+                for existing_start, existing_end
+                in occupied_ranges
+            )
+
+            if overlaps_existing:
+                continue
 
             found.append(pattern)
+            occupied_ranges.append(
+                (start, end)
+            )
+            break
 
     return found
 
@@ -165,7 +285,8 @@ def scan_document(text):
 
     direct_signals = find_signals(
         text,
-        DIRECT_PROMPT_INJECTION
+        DIRECT_PROMPT_INJECTION,
+        ignore_negated=True
     )
 
     for signal in direct_signals:
@@ -183,7 +304,8 @@ def scan_document(text):
 
     rag_signals = find_signals(
         text,
-        RAG_DIRECTED_INSTRUCTIONS
+        RAG_DIRECTED_INSTRUCTIONS,
+        ignore_negated=True
     )
 
     for signal in rag_signals:
@@ -201,7 +323,8 @@ def scan_document(text):
 
     external_signals = find_signals(
         text,
-        SUSPICIOUS_EXTERNAL_ACTIONS
+        SUSPICIOUS_EXTERNAL_ACTIONS,
+        ignore_negated=True
     )
 
     for signal in external_signals:
@@ -256,67 +379,31 @@ def scan_document(text):
     # 6. ML SECURITY DECISION
     # =====================================================
 
+    # The trained classifier is the primary ML security signal.
+    # A MALICIOUS prediction must not be silently approved simply
+    # because its probability is below an older fixed threshold.
+
     ml_security_triggered = False
 
-    # -----------------------------------------------------
-    # High-confidence malicious ML prediction
-    # -----------------------------------------------------
-
-    if (
-        ml_prediction == "MALICIOUS"
-        and malicious_probability >= HIGH_CONFIDENCE
-    ):
+    if ml_prediction == "MALICIOUS":
 
         ml_security_triggered = True
 
         detected_signals.append({
-            "type": "HIGH_CONFIDENCE_ML_THREAT",
+            "type": "ML_MALICIOUS_THREAT",
             "confidence": round(
                 malicious_probability,
                 4
             )
         })
 
-    # -----------------------------------------------------
-    # Medium-confidence ML + independent rule evidence
-    # -----------------------------------------------------
-
-    elif (
-        ml_prediction == "MALICIOUS"
-        and malicious_probability >= MEDIUM_CONFIDENCE
-        and rule_signal_count >= 1
-    ):
-
-        ml_security_triggered = True
+    else:
 
         detected_signals.append({
-            "type": "ML_PLUS_RULE_THREAT",
+            "type": "ML_SAFE_CLASSIFICATION",
             "confidence": round(
-                malicious_probability,
+                safe_probability,
                 4
-            ),
-            "rule_signals": rule_signal_count
-        })
-
-    # -----------------------------------------------------
-    # Low-confidence ML prediction
-    # -----------------------------------------------------
-
-    elif (
-        ml_prediction == "MALICIOUS"
-        and malicious_probability < MEDIUM_CONFIDENCE
-        and rule_signal_count == 0
-    ):
-
-        detected_signals.append({
-            "type": "LOW_CONFIDENCE_ML_WARNING",
-            "confidence": round(
-                malicious_probability,
-                4
-            ),
-            "message": (
-                "ML prediction is uncertain and "
-                "has no independent rule evidence."
             )
         })
 
